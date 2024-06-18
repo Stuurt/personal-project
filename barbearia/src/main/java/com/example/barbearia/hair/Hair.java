@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Table(name= "hairs")
-@Entity(name= "hairs")
+@Entity(name= "hair")
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
