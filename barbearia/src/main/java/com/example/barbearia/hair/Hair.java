@@ -19,4 +19,10 @@ public class Hair {
     private String title;
     private String image;
     private Integer price;
+
+    public Hair(HairRequestDTO data){
+        this.title = data.title();
+        this.image = data.image();
+        this.price = data.price();
+    }
 }
