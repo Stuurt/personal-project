@@ -16,13 +16,14 @@ public class HairController {
     @Autowired
     private HairRepository repository;
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
     public void saveHair(@RequestBody HairRequestDTO data){
         Hair hairData = new Hair(data);
         repository.save(hairData);
         return;
     }
-
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public List<HairResponseDTO> getAll(){
 
