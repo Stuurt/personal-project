@@ -1,14 +1,12 @@
 package com.example.barbearia.hair;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Table(name= "hairs")
 @Entity(name= "hairs")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -25,4 +23,5 @@ public class Hair {
         this.image = data.image();
         this.price = data.price();
     }
+
 }

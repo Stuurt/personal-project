@@ -1,5 +1,6 @@
 package com.example.barbearia.controller;
 
+import ch.qos.logback.core.model.Model;
 import com.example.barbearia.hair.Hair;
 import com.example.barbearia.hair.HairRepository;
 import com.example.barbearia.hair.HairRequestDTO;
@@ -29,5 +30,13 @@ public class HairController {
 
         List<HairResponseDTO> hairList = repository.findAll().stream().map(HairResponseDTO::new).toList();
         return hairList;
+    }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/delete/{id}")
+    public String deleteHair(@PathVariable("id") long id, Model model) {
+        Hair hair = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid hair Id:" + id));
+        repository.delete(hair);
+        return "Hair excluído com sucesso!";
     }
 }
