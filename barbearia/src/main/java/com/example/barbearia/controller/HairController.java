@@ -1,11 +1,11 @@
 package com.example.barbearia.controller;
 
-import ch.qos.logback.core.model.Model;
 import com.example.barbearia.hair.Hair;
 import com.example.barbearia.hair.HairRepository;
 import com.example.barbearia.hair.HairRequestDTO;
 import com.example.barbearia.hair.HairResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,24 +19,40 @@ public class HairController {
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
-    public void saveHair(@RequestBody HairRequestDTO data){
+    public ResponseEntity <?> create(@RequestBody HairRequestDTO data){
         Hair hairData = new Hair(data);
         repository.save(hairData);
-        return;
+        return ResponseEntity.ok().body("Hair criado com sucesso!");
     }
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public List<HairResponseDTO> getAll(){
 
-        List<HairResponseDTO> hairList = repository.findAll().stream().map(HairResponseDTO::new).toList();
+        List<HairResponseDTO> hairList = repository.findAll().stream()
+                .map(HairResponseDTO::new).toList();
         return hairList;
     }
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @GetMapping("/delete/{id}")
-    public String deleteHair(@PathVariable("id") long id, Model model) {
-        Hair hair = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid hair Id:" + id));
-        repository.delete(hair);
-        return "Hair excluído com sucesso!";
+    @PutMapping(value="/{id}")
+    public ResponseEntity <?> update(@PathVariable("id") long id,
+                                 @RequestBody Hair hair) {
+        return repository.findById(id)
+                .map(record -> {
+                    record.setTitle(hair.getTitle());
+                    record.setImage(hair.getImage());
+                    record.setPrice(hair.getPrice());
+                    repository.save(record);
+                    return ResponseEntity.ok().body("Hair alterado com sucesso!");
+                }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @DeleteMapping(path ={"/{id}"})
+    public ResponseEntity <?> delete(@PathVariable long id) {
+        return repository.findById(id)
+                .map(record -> {
+                    repository.deleteById(id);
+                    return ResponseEntity.ok().body("Hair excluído com sucesso!");
+                }).orElse(ResponseEntity.notFound().build());
     }
 }
